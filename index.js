@@ -11,7 +11,7 @@ app.use(express.json())
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ij3feyg.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -29,11 +29,19 @@ async function run() {
     // await client.connect();
 
     const trainersCollection = client.db("FitZ").collection("trainers");
+    const newsletterCollection = client.db("FitZ").collection("newsletter");
 
     app.get('/trainers', async(req,res) => {
         const result = await trainersCollection.find().toArray()
         res.send(result)
     })
+
+    app.get('/trainers/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)};
+        const result = await trainersCollection.findOne(query);
+        res.send(result)
+      })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
