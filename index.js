@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express()
-const cors =require('cors')
+const cors = require('cors')
 require('dotenv').config()
 
 const port = process.env.PORT || 5000
@@ -32,21 +32,29 @@ async function run() {
     const newsletterCollection = client.db("FitZ").collection("newsletter");
     const galleryCollection = client.db("FitZ").collection("gallery");
 
-    app.get('/trainers', async(req,res) => {
-        const result = await trainersCollection.find().toArray()
-        res.send(result)
+    app.get('/trainers', async (req, res) => {
+      const result = await trainersCollection.find().toArray()
+      res.send(result)
     })
-    app.get('/gallery', async(req,res) => {
-        const result = await galleryCollection.find().toArray()
-        res.send(result)
+
+    app.get('/gallery', async (req, res) => {
+      const result = await galleryCollection.find().toArray()
+      res.send(result)
     })
 
     app.get('/trainers/:id', async (req, res) => {
-        const id = req.params.id;
-        const query = {_id: new ObjectId(id)};
-        const result = await trainersCollection.findOne(query);
-        res.send(result)
-      })
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await trainersCollection.findOne(query);
+      res.send(result)
+    })
+
+    app.post('/be-trainer', async (req, res) => {
+      const newTrainer = req.body;
+      console.log(newTrainer);
+      const result = await trainersCollection.insertOne(newTrainer)
+      res.send(result)
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -59,10 +67,10 @@ async function run() {
 run().catch(console.dir);
 
 
-app.get('/', (req,res) => {
-    res.send('server running')
+app.get('/', (req, res) => {
+  res.send('server running')
 })
 
 app.listen(port, () => {
-    console.log(`runing on port:${port}`);
+  console.log(`runing on port:${port}`);
 })
