@@ -31,6 +31,7 @@ async function run() {
     const trainersCollection = client.db("FitZ").collection("trainers");
     const newsletterCollection = client.db("FitZ").collection("newsletter");
     const galleryCollection = client.db("FitZ").collection("gallery");
+    const blogCollection = client.db("FitZ").collection("blogs");
 
     app.get('/trainers', async (req, res) => {
       const result = await trainersCollection.find().toArray()
@@ -39,6 +40,11 @@ async function run() {
 
     app.get('/gallery', async (req, res) => {
       const result = await galleryCollection.find().toArray()
+      res.send(result)
+    })
+
+    app.get('/blogs', async (req, res) => {
+      const result = await blogCollection.find().toArray()
       res.send(result)
     })
 
