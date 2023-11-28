@@ -27,17 +27,24 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
-
+    
     const trainersCollection = client.db("FitZ").collection("trainers");
     const newsletterCollection = client.db("FitZ").collection("newsletter");
     const galleryCollection = client.db("FitZ").collection("gallery");
     const blogCollection = client.db("FitZ").collection("blogs");
-
+    
     app.get('/trainers', async (req, res) => {
       const result = await trainersCollection.find().toArray()
       res.send(result)
     })
-
+    
+    app.get('/trainers/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await trainersCollection.findOne(query);
+      res.send(result)
+    })
+    
     app.get('/gallery', async (req, res) => {
       const result = await galleryCollection.find().toArray()
       res.send(result)
@@ -48,12 +55,13 @@ async function run() {
       res.send(result)
     })
 
-    app.get('/trainers/:id', async (req, res) => {
+    app.get('/blogs/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      const result = await trainersCollection.findOne(query);
+      const result = await blogCollection.findOne(query);
       res.send(result)
     })
+    
 
     app.post('/be-trainer', async (req, res) => {
       const newTrainer = req.body;
