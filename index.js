@@ -6,7 +6,13 @@ require('dotenv').config()
 const port = process.env.PORT || 5000
 
 
-app.use(cors())
+app.use(cors({
+  origin: [
+    "https://assignment-12-c2bbc.web.app",
+    "https://assignment-12-c2bbc.firebaseapp.com",
+  ],
+  credentials: true
+}))
 app.use(express.json())
 
 
@@ -35,7 +41,7 @@ async function run() {
     const classCollection = client.db("FitZ").collection("classes");
 
     app.get('/trainers', async (req, res) => {
-      
+
 
       const result = await trainersCollection.find().toArray()
       res.send(result)
