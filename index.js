@@ -39,6 +39,7 @@ async function run() {
     const galleryCollection = client.db("FitZ").collection("gallery");
     const blogCollection = client.db("FitZ").collection("blogs");
     const classCollection = client.db("FitZ").collection("classes");
+    const userCollection = client.db("FitZ").collection("users");
 
     app.get('/trainers', async (req, res) => {
 
@@ -46,6 +47,8 @@ async function run() {
       const result = await trainersCollection.find().toArray()
       res.send(result)
     })
+
+   
 
     app.get('/trainers/:id', async (req, res) => {
       const id = req.params.id;
@@ -93,6 +96,11 @@ async function run() {
       res.send(result)
     })
 
+    app.post('/users', async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user)
+      res.send(result)
+    })
 
     app.post('/be-trainer', async (req, res) => {
       const newTrainer = req.body;
